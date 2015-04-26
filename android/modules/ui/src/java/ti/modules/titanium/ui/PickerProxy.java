@@ -665,13 +665,9 @@ public class PickerProxy extends TiViewProxy implements PickerColumnListener
 	    }
 
 		HashMap settings = new HashMap();
-		boolean cancelable = true;
 		final AtomicInteger callbackCount = new AtomicInteger(0); // just a flag to be sure dismiss doesn't fire callback if ondateset did already.
 		if (args.length > 0) {
 			settings = (HashMap) args[0];
-		}
-		if (settings.containsKey(TiC.PROPERTY_CANCELABLE)) {
-			cancelable = TiConvert.toBoolean(settings, TiC.PROPERTY_CANCELABLE);
 		}
 		Calendar calendar = Calendar.getInstance();
 		if (settings.containsKey("value")) {
@@ -775,7 +771,7 @@ public class PickerProxy extends TiViewProxy implements PickerColumnListener
 			dialog.getDatePicker().setMaxDate(trimDate(minMaxDate).getTime());
 		}
 		
-		dialog.setCancelable(cancelable);
+		dialog.setCancelable(true);
 		if (dismissListener != null) {
 			dialog.setOnDismissListener(dismissListener);
 		}
@@ -813,7 +809,6 @@ public class PickerProxy extends TiViewProxy implements PickerColumnListener
 	{
 		HashMap settings = new HashMap();
 		boolean is24HourView = false;
-		boolean cancelable = true;
 		int minuteInterval = 1;
 		final AtomicInteger callbackCount = new AtomicInteger(0); // just a flag to be sure dismiss doesn't fire callback if ondateset did already.
 		if (args.length > 0) {
@@ -822,12 +817,9 @@ public class PickerProxy extends TiViewProxy implements PickerColumnListener
 		if (settings.containsKey("format24")) {
 			is24HourView = TiConvert.toBoolean(settings, "format24");
 		}
-		if (settings.containsKey(TiC.PROPERTY_CANCELABLE)) {
-			cancelable = TiConvert.toBoolean(settings, TiC.PROPERTY_CANCELABLE);
-		}
 		if (settings.containsKey(TiC.PROPERTY_MINUTE_INTERVAL)) {
 			minuteInterval = TiConvert.toInt(settings, TiC.PROPERTY_MINUTE_INTERVAL);
-			if (minuteInterval < 1) {
+			if (minuteInterval < 1 || minuteInterval > 59) {
 				minuteInterval = 1;
 			}
 		}
@@ -902,7 +894,7 @@ public class PickerProxy extends TiViewProxy implements PickerColumnListener
 					calendar.get(Calendar.MINUTE), is24HourView);
 		}
 
-		dialog.setCancelable(cancelable);
+		dialog.setCancelable(true);
 		if (dismissListener != null) {
 			dialog.setOnDismissListener(dismissListener);
 		}
