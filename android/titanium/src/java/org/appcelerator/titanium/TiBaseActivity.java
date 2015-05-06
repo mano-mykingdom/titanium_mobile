@@ -425,6 +425,14 @@ public abstract class TiBaseActivity extends AppCompatActivity
 				}
 			});
 		}
+        
+        if (shouldFinishRootActivity() == false) {
+            runOnUiThread(new Runnable(){
+                public void run() {
+                    activityProxy.getActionBar().setDisplayHomeAsUp(true);
+                }
+            });
+        }
 	}
 
 	// Subclasses can override to provide a custom layout
