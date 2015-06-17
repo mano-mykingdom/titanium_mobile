@@ -130,12 +130,6 @@ public class CalendarModule extends KrollModule
 	{
 		return CalendarProxy.createCalendar(data);
 	}
-	
-	@Kroll.method
-	public boolean deleteCalendar(KrollDict data)
-	{
-		return CalendarProxy.deleteCalendar(data);
-	}
 
 	@Kroll.getProperty @Kroll.method
 	public AlertProxy[] getAllAlerts()
