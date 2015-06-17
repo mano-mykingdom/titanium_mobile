@@ -24,6 +24,16 @@ import android.os.Build;
 @Kroll.module
 public class CalendarModule extends KrollModule
 {
+	@Kroll.constant public static final int ACCESS_NONE = CalendarProxy.ACCESS_NONE;
+	@Kroll.constant public static final int ACCESS_FREEBUSY = CalendarProxy.ACCESS_FREEBUSY;
+	@Kroll.constant public static final int ACCESS_READ = CalendarProxy.ACCESS_READ;
+	@Kroll.constant public static final int ACCESS_RESPOND = CalendarProxy.ACCESS_RESPOND;
+	@Kroll.constant public static final int ACCESS_OVERRIDE = CalendarProxy.ACCESS_OVERRIDE;
+	@Kroll.constant public static final int ACCESS_CONTRIBUTOR = CalendarProxy.ACCESS_CONTRIBUTOR;
+	@Kroll.constant public static final int ACCESS_EDITOR = CalendarProxy.ACCESS_EDITOR;
+	@Kroll.constant public static final int ACCESS_OWNER = CalendarProxy.ACCESS_OWNER;
+	@Kroll.constant public static final int ACCESS_ROOT = CalendarProxy.ACCESS_ROOT;
+	
 	@Kroll.constant public static final int STATUS_TENTATIVE = EventProxy.STATUS_TENTATIVE;
 	@Kroll.constant public static final int STATUS_CONFIRMED = EventProxy.STATUS_CONFIRMED;
 	@Kroll.constant public static final int STATUS_CANCELED = EventProxy.STATUS_CANCELED;
@@ -113,6 +123,18 @@ public class CalendarModule extends KrollModule
 		} else {
 			return null;
 		}
+	}
+	
+	@Kroll.method
+	public CalendarProxy createCalendar(KrollDict data)
+	{
+		return CalendarProxy.createCalendar(data);
+	}
+	
+	@Kroll.method
+	public boolean deleteCalendar(KrollDict data)
+	{
+		return CalendarProxy.deleteCalendar(data);
 	}
 
 	@Kroll.getProperty @Kroll.method
