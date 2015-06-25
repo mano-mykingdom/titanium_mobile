@@ -1927,6 +1927,17 @@
 	filterAttribute = [newFilterAttribute copy];
 }
 
+-(void)setFilterText_:(id)args
+{
+    id searchView = [self.proxy valueForKey:@"search"];
+    if (!IS_NULL_OR_NIL(searchView)) {
+        DebugLog(@"Can not use filterText with searchView. Ignoring call.");
+        return;
+    }
+    [self setSearchString: [TiUtils stringValue:args]];
+    [self updateSearchResultIndexes];
+}
+
 -(void)setIndex_:(NSArray*)index_
 {
 	RELEASE_TO_NIL(sectionIndex);
