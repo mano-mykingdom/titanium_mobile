@@ -312,6 +312,7 @@
 	if (self = [super init])
 	{
         hideOnSearch = YES; // Legacy behavior
+        keepSectionsWithNoRowsInSearch = YES; // defaults to false on search
 		filterCaseInsensitive = YES; // defaults to true on search
 		filterAnchored = NO; // defaults to false on search
 		searchString = @"";
@@ -1246,7 +1247,7 @@
         CGPoint point = [recognizer locationInView:ourTableView];
         NSIndexPath *indexPath = [ourTableView indexPathForRowAtPoint:point];
 
-        BOOL search = (ourTableView != tableview);
+        BOOL search = (ourTableView != tableview || searchResultIndexes != nil);
         
         if (indexPath == nil) {
             //indexPath will also be nil if you click the header of the first section. TableView Bug??
@@ -1934,8 +1935,9 @@
         DebugLog(@"Can not use filterText with searchView. Ignoring call.");
         return;
     }
-    [self setSearchString: [TiUtils stringValue:args]];
+    [self setSearchString:[TiUtils stringValue:args]];
     [self updateSearchResultIndexes];
+    [tableview reloadData];
 }
 
 -(void)setIndex_:(NSArray*)index_
@@ -1961,6 +1963,11 @@
 	TiThreadPerformOnMainThread(^{
 		[[self tableView] reloadData];
 	}, NO);
+}
+
+-(void)setKeepSectionsWithNoRowsInSearch_:(id)caseBool
+{
+    keepSectionsWithNoRowsInSearch = [TiUtils boolValue:caseBool];
 }
 
 -(void)setFilterAnchored_:(id)anchoredBool
@@ -2101,6 +2108,12 @@ if(ourTableView != tableview)	\
 	return result;	\
 }
 
+#define RETURN_IF_SECTION_HAS_NO_ROWS(result)	\
+if(!keepSectionsWithNoRowsInSearch && searchResultIndexes != nil && [searchResultIndexes count] > section && ![[searchResultIndexes objectAtIndex:section] count])	\
+{  \
+return result;	\
+}
+
 #define RETURN_IF_SEARCH_IS_ACTIVE(result)	\
 if(searchActivated)	\
 {	\
@@ -2117,7 +2130,14 @@ return result;	\
 			rowCount += [thisSet count];
 		}
 		return rowCount;
-	}
+	}else if (searchResultIndexes != nil) {
+        //sections are ignored with searchView, with filterText it is not
+        if ([searchResultIndexes count] <= section) {
+            return 0;
+        }
+        NSArray* theSection = [searchResultIndexes objectAtIndex:section];
+        return [theSection count];
+    }
 	
 	TiUITableViewSectionProxy *sectionProxy = [self sectionForIndex:section];
 	return sectionProxy.rowCount;
@@ -2129,7 +2149,7 @@ return result;	\
 - (UITableViewCell *)tableView:(UITableView *)ourTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSIndexPath* index = indexPath;
-	if (ourTableView != tableview) {
+	if (ourTableView != tableview || searchResultIndexes != nil) {
 		index = [self indexPathFromSearchIndex:[indexPath row]];
 	}
 	
@@ -2172,7 +2192,7 @@ return result;	\
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)ourTableView
 {
     //TIMOB-15526
-    if (ourTableView != tableview && ourTableView.backgroundColor == [UIColor clearColor]) {
+    if ((ourTableView != tableview || searchResultIndexes != nil) && ourTableView.backgroundColor == [UIColor clearColor]) {
         ourTableView.backgroundColor = [UIColor whiteColor];
     }
 
@@ -2185,6 +2205,7 @@ return result;	\
 - (NSString *)tableView:(UITableView *)ourTableView titleForHeaderInSection:(NSInteger)section
 {
 	RETURN_IF_SEARCH_TABLE_VIEW(nil);
+    RETURN_IF_SECTION_HAS_NO_ROWS(nil);
 	TiUITableViewSectionProxy *sectionProxy = [self sectionForIndex:section];
 	return [sectionProxy headerTitle];
 }
@@ -2192,6 +2213,7 @@ return result;	\
 - (NSString *)tableView:(UITableView *)ourTableView titleForFooterInSection:(NSInteger)section
 {
 	RETURN_IF_SEARCH_TABLE_VIEW(nil);
+    RETURN_IF_SECTION_HAS_NO_ROWS(nil);
 	TiUITableViewSectionProxy *sectionProxy = [self sectionForIndex:section];
 	return [sectionProxy footerTitle];
 }
@@ -2409,7 +2431,7 @@ return result;	\
 	{
 		[ourTableView deselectRowAtIndexPath:indexPath animated:YES];
 	}
-	if(ourTableView != tableview)
+	if(ourTableView != tableview || searchResultIndexes != nil)
 	{
 		search = YES;
 	}
@@ -2420,7 +2442,7 @@ return result;	\
 -(void)tableView:(UITableView *)ourTableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSIndexPath* index = indexPath;
-	if (ourTableView != tableview) {
+	if (ourTableView != tableview || searchResultIndexes != nil) {
 		index = [self indexPathFromSearchIndex:[indexPath row]];
 	}
 	
@@ -2477,7 +2499,7 @@ return result;	\
 	{
 		[ourTableView deselectRowAtIndexPath:indexPath animated:YES];
 	}
-	if(ourTableView != tableview)
+	if(ourTableView != tableview || searchResultIndexes != nil)
 	{
 		search = YES;
 	}
@@ -2523,7 +2545,7 @@ return result;	\
 - (CGFloat)tableView:(UITableView *)ourTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {    
 	NSIndexPath* index = indexPath;
-	if (ourTableView != tableview) {
+	if (ourTableView != tableview || searchResultIndexes != nil) {
 		index = [self indexPathFromSearchIndex:[indexPath row]];
 	}
 	
@@ -2539,12 +2561,14 @@ return result;	\
 - (UIView *)tableView:(UITableView *)ourTableView viewForHeaderInSection:(NSInteger)section
 {
 	RETURN_IF_SEARCH_TABLE_VIEW(nil);
+    RETURN_IF_SECTION_HAS_NO_ROWS(nil);
 	return [self sectionView:section forLocation:@"headerView" section:nil];
 }
 
 - (UIView *)tableView:(UITableView *)ourTableView viewForFooterInSection:(NSInteger)section
 {
 	RETURN_IF_SEARCH_TABLE_VIEW(nil);
+    RETURN_IF_SECTION_HAS_NO_ROWS(nil);
 	return [self sectionView:section forLocation:@"footerView" section:nil];
 }
 
@@ -2552,6 +2576,7 @@ return result;	\
 {
 	RETURN_IF_SEARCH_TABLE_VIEW(0.0);
     RETURN_IF_SEARCH_IS_ACTIVE(0.0);
+    RETURN_IF_SECTION_HAS_NO_ROWS(0.0);
 	TiUITableViewSectionProxy *sectionProxy = nil;
 	TiUIView *view = [self sectionView:section forLocation:@"headerView" section:&sectionProxy];
 	TiViewProxy *viewProxy = (TiViewProxy *)[view proxy];
@@ -2602,6 +2627,7 @@ return result;	\
 {
 	RETURN_IF_SEARCH_TABLE_VIEW(0.0);
     RETURN_IF_SEARCH_IS_ACTIVE(0.0);
+    RETURN_IF_SECTION_HAS_NO_ROWS(0.0);
 	TiUITableViewSectionProxy *sectionProxy = nil;
 	TiUIView *view = [self sectionView:section forLocation:@"footerView" section:&sectionProxy];
 	TiViewProxy *viewProxy = (TiViewProxy *)[view proxy];
