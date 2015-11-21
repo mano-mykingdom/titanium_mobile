@@ -18,20 +18,23 @@ import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.TiContext;
+import org.appcelerator.titanium.util.TiConvert;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Calendars;
 import android.text.format.DateUtils;
 
 @Kroll.proxy(parentModule=CalendarModule.class)
 public class CalendarProxy extends KrollProxy {
 
-	protected String id, name;
 	private static final String TAG = "Calendar";
 	public static final int ACCESS_NONE = Calendars.CAL_ACCESS_NONE;
 	public static final int ACCESS_FREEBUSY = Calendars.CAL_ACCESS_FREEBUSY;
@@ -42,8 +45,8 @@ public class CalendarProxy extends KrollProxy {
 	public static final int ACCESS_EDITOR = Calendars.CAL_ACCESS_EDITOR;
 	public static final int ACCESS_OWNER = Calendars.CAL_ACCESS_OWNER;
 	public static final int ACCESS_ROOT = Calendars.CAL_ACCESS_ROOT;
-	
-	protected String id, name, accountName, accountType;
+    
+    protected String id, name, accountName, accountType;
 	protected boolean selected, hidden;
 	private static final long MAX_DATE_RANGE = 2 * DateUtils.YEAR_IN_MILLIS - 3 * DateUtils.DAY_IN_MILLIS;
 
