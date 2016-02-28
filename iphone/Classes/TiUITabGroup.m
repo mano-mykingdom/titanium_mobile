@@ -429,6 +429,7 @@ DEFINE_EXCEPTIONS
 
 -(void)setTranslucent_:(id)value
 {
+    controller.tabBar.translucent = [TiUtils boolValue:value def:YES];
     [[self proxy] replaceValue:value forKey:@"translucent" notification:NO];
     [self updateMoreBar:[controller moreNavigationController]];
 }
