@@ -196,10 +196,26 @@ typedef void(^EKEventStoreRequestAccessCompletionHandler)(BOOL granted, NSError 
         return nil;
     }
     EKSource *localSource = nil;
+    //search for local calendar source
     for (EKSource *source in [ourStore sources])
-        if ([source sourceType] == EKSourceTypeLocal){
+    {
+        if ([source sourceType] == EKSourceTypeLocal)
+        {
             localSource = source;
-        break;
+            break;
+        }
+    }
+    //local source might be hidden as iCould is enabled, so create on iCloud
+    if (localSource == nil)
+    {
+        for (EKSource *source in [ourStore sources])
+        {
+            if ([source sourceType] == EKSourceTypeCalDAV)
+            {
+                localSource = source;
+                break;
+            }
+        }
     }
     EKCalendar* calendar_ = [EKCalendar calendarForEntityType:EKEntityTypeEvent eventStore:ourStore];
     if (calendar_ == NULL) {
