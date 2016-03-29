@@ -195,39 +195,43 @@ typedef void(^EKEventStoreRequestAccessCompletionHandler)(BOOL granted, NSError 
         DebugLog(@"Could not instantiate an event of the event store.");
         return nil;
     }
-    EKSource *localSource = nil;
+    EKSource *newSource = nil;
     //search for local calendar source
     for (EKSource *source in [ourStore sources])
     {
         if ([source sourceType] == EKSourceTypeLocal)
         {
-            localSource = source;
+            newSource = source;
             break;
         }
     }
-    //local source might be hidden as iCould is enabled, so create on iCloud
-    if (localSource == nil)
+    //local source is be hidden, so get the default source
+    if (newSource == nil)
     {
-        for (EKSource *source in [ourStore sources])
-        {
-            if ([source sourceType] == EKSourceTypeCalDAV)
-            {
-                localSource = source;
-                break;
-            }
+        EKCalendar* defaultCalendar_ = [ourStore defaultCalendarForNewEvents];
+        if (defaultCalendar_ == NULL) {
+            return nil;
         }
+        newSource = defaultCalendar_.source;
     }
     EKCalendar* calendar_ = [EKCalendar calendarForEntityType:EKEntityTypeEvent eventStore:ourStore];
     if (calendar_ == NULL) {
-        return NULL;
+        return nil;
     }
     calendar_.title = [props objectForKey:@"name"];
     if([props objectForKey:@"color"])
     {
         calendar_.CGColor = [[[TiUtils colorValue:[props objectForKey:@"color"]] _color] CGColor];
     }
-    calendar_.source = localSource;
-    [ourStore saveCalendar:calendar_ commit:YES error:nil];
+    calendar_.source = newSource;
+    __block NSError * error = nil;
+    __block BOOL result;
+    result = [ourStore saveCalendar:calendar_ commit:YES error:&error];
+    if (result == NO || error != nil) {
+        [self throwException:[NSString stringWithFormat:@"Failed to create calendar : %@",[TiUtils messageFromError:error]]
+            subreason:nil
+            location:CODELOCATION];
+    }
     TiCalendarCalendar* calendar = [[[TiCalendarCalendar alloc] _initWithPageContext:[self executionContext] calendar:calendar_ module:self] autorelease];
     return calendar;
 }
