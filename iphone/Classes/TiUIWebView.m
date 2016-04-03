@@ -676,6 +676,35 @@ NSString *HTMLTextEncodingNameForStringEncoding(NSStringEncoding encoding)
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
 	NSURL * newUrl = [request URL];
+    
+    NSDictionary *headers = [self.proxy valueForKey:@"headers"];
+    if(headers && ![headers isEqual:[NSNull null]])
+    {
+        NSEnumerator *enumerator = [headers keyEnumerator];
+        id firstKey = [enumerator nextObject];
+        BOOL headerIsPresent = [[request allHTTPHeaderFields] objectForKey:firstKey] != nil;
+        if(!headerIsPresent)
+        {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                   
+                    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:newUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+                    
+                    //first key
+                    [request addValue:[TiUtils stringValue:firstKey properties:headers def:@""] forHTTPHeaderField:firstKey];
+                    
+                    //rest of key-value pairs in object (if any)
+                    id key;
+                    while ((key = [enumerator nextObject])) {
+                        [request addValue:[TiUtils stringValue:key properties:headers def:@""] forHTTPHeaderField:key];
+                    }
+                    
+                    [[self webview] loadRequest:request];
+                });
+            });
+            return NO;
+        }
+    }
 
 	if ([self.proxy _hasListeners:@"beforeload"])
 	{
