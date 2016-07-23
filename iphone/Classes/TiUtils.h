@@ -160,7 +160,7 @@ typedef enum
  @param rootPath The base URL.
  @return The absolute URL.
  */
-+(NSURL*)toURL:(NSString *)relativeString relativeToURL:(NSURL *)rootPath;
++(NSURL*)toURL:(NSString *)relativeString relativeToURL:(NSURL *)rootPath autoEncodeUrl:(BOOL)encodeUrl;
 
 /**
  Constructs URL from string using proxy's base URL.
