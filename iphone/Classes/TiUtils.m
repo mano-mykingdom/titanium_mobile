@@ -783,7 +783,7 @@ bool Base64AllocAndEncodeData(const void *inInputData, size_t inInputDataSize, c
 const CFStringRef charactersThatNeedEscaping = NULL;
 const CFStringRef charactersToNotEscape = CFSTR(":[]@!$' ()*+,;\"<>%{}|\\^~`#");
 
-+(NSURL*)toURL:(NSString *)relativeString relativeToURL:(NSURL *)rootPath
++(NSURL*)toURL:(NSString *)relativeString relativeToURL:(NSURL *)rootPath autoEncodeUrl:(BOOL)encodeUrl
 {
 /*
 Okay, behavior: Bad values are either converted or ejected.
@@ -816,7 +816,7 @@ If the new path starts with / and the base url is app://..., we have to massage 
     
     // don't bother if we don't at least have a path and it's not remote
     //TODO: What is this mess? -BTH
-    if ([relativeString hasPrefix:@"http://"] || [relativeString hasPrefix:@"https://"])
+    if (encodeUrl && ([relativeString hasPrefix:@"http://"] || [relativeString hasPrefix:@"https://"]))
     {
         NSRange range = [relativeString rangeOfString:@"/" options:0 range:NSMakeRange(7, [relativeString length]-7)];
         if (range.location!=NSNotFound)
@@ -885,7 +885,7 @@ If the new path starts with / and the base url is app://..., we have to massage 
 
 +(NSURL*)toURL:(NSString *)object proxy:(TiProxy*)proxy
 {
-	return [self toURL:object relativeToURL:[proxy _baseURL]];  
+	return [self toURL:object relativeToURL:[proxy _baseURL] autoEncodeUrl:[TiUtils boolValue: [proxy valueForUndefinedKey:@"autoEncodeUrl"] def:YES]];
 }
 
 +(UIImage *)stretchableImage:(id)object proxy:(TiProxy*)proxy
