@@ -351,6 +351,7 @@
 		DAE541E313577BEC00A65123 /* TiDataStream.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE541E213577BEC00A65123 /* TiDataStream.m */; };
 		EF0ADCFA143F9ABF00977386 /* NSData+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0ADCF9143F9ABF00977386 /* NSData+Additions.m */; };
 		EF0ADD1A143FA0CD00977386 /* GeolocationModule.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0ADD19143FA0CD00977386 /* GeolocationModule.m */; };
+		FC0ABBD71E298FEC0066F315 /* TiEventEditViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FC0ABBD61E298FEC0066F315 /* TiEventEditViewDelegate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1051,6 +1052,8 @@
 		DAE541E213577BEC00A65123 /* TiDataStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TiDataStream.m; sourceTree = "<group>"; };
 		EF0ADCF9143F9ABF00977386 /* NSData+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Additions.m"; path = "../Classes/NSData+Additions.m"; sourceTree = "<group>"; };
 		EF0ADD19143FA0CD00977386 /* GeolocationModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeolocationModule.m; sourceTree = "<group>"; };
+		FC0ABBD51E298FEC0066F315 /* TiEventEditViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiEventEditViewDelegate.h; sourceTree = "<group>"; };
+		FC0ABBD61E298FEC0066F315 /* TiEventEditViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TiEventEditViewDelegate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2554,6 +2557,8 @@
 				D93DAA6316CBFC7C00AD64C9 /* TiCalendarReminder.m */,
 				D930111C16DA9D61002E25C2 /* TiCalendarRecurrenceRule.h */,
 				D930111D16DA9D62002E25C2 /* TiCalendarRecurrenceRule.m */,
+				FC0ABBD51E298FEC0066F315 /* TiEventEditViewDelegate.h */,
+				FC0ABBD61E298FEC0066F315 /* TiEventEditViewDelegate.m */,
 			);
 			name = Calendar;
 			sourceTree = "<group>";
@@ -2954,6 +2959,7 @@
 				84D541A81460B3C9005338D1 /* TiDOMEntityProxy.m in Sources */,
 				84D541AD1460B3EE005338D1 /* TiDOMEntityRefProxy.m in Sources */,
 				B6465C2318D1011C003C51A8 /* TiNetworkCookieProxy.m in Sources */,
+				FC0ABBD71E298FEC0066F315 /* TiEventEditViewDelegate.m in Sources */,
 				2BDEA4F31448FFB7004EC750 /* TiUIiOSTabbedBarProxy.m in Sources */,
 				BB26FC8019AB13B9007A35AF /* TiAppiOSNotificationActionProxy.m in Sources */,
 				844E1F7E14883A3700F5424C /* TiDOMValidator.m in Sources */,

@@ -1,11 +1,15 @@
 /**
  * Appcelerator Titanium Mobile
- * Copyright (c) 2009-2013 by Appcelerator, Inc. All Rights Reserved.
+ * Copyright (c) 2009-2017 by Appcelerator, Inc. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
+ * 
+ * WARNING: This is generated code. Modify at your own risk and without support.
  */
 #ifdef USE_TI_CALENDAR
 
+#import "TiApp.h"
+#import "TiEventEditViewDelegate.h"
 #import "CalendarModule.h"
 #import "TiCalendarEvent.h"
 #import "TiCalendarAlert.h"
@@ -529,6 +533,22 @@
     return NUMBOOL(result);
 }
 
-@end
+-(void) showEditor:(id)args
+{
+    ENSURE_SINGLE_ARG(args, KrollCallback);
+    KrollCallback * callback = args;
+    
+    EKEventEditViewController* editViewController = [[EKEventEditViewController alloc] init];
+    editViewController.eventStore = [module store];
+    editViewController.event = event;
+    editViewController.editViewDelegate = [[TiEventEditViewDelegate alloc] initWithCallback:callback];
+    
+    TiThreadPerformOnMainThread(^{
+        [[TiApp app] showModalController:editViewController
+                                animated:YES];
+    }, YES);
+}
+
+-@end
 
 #endif
