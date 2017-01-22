@@ -83,6 +83,9 @@
     if ([key isEqualToString:@"title"]) {
         return currEvent.title;
     }
+    else if ([key isEqualToString:@"url"]) {
+        return [TiUtils stringValue:currEvent.URL];
+    }
     else if ([key isEqualToString:@"notes"]) {
         return [TiUtils stringValue:currEvent.notes];
     }
@@ -165,6 +168,10 @@
     
     if ([key isEqualToString:@"allDay"]) {
         currEvent.allDay = [TiUtils boolValue:value def:NO];
+        return;
+    }
+    else if ([key isEqualToString:@"url"]) {
+        currEvent.URL = [[NSURL alloc] initWithString:[TiUtils stringValue:value]];;
         return;
     }
     else if ([key isEqualToString:@"notes"]) {
