@@ -97,12 +97,22 @@ public class TiUIScrollableView extends TiUIView
 				TiCompositeLayout.LayoutParams layoutParams = (TiCompositeLayout.LayoutParams) mContainer.getLayoutParams();
 				
 				if (layoutParams.sizeOrFillHeightEnabled && !layoutParams.autoFillsHeight) {
-					int index = getCurrentItem();
-					if (index < mViews.size()) {
+					int height = 0;
+					for(int index = 0; index < mViews.size(); index++) {
+						int h = 0;
 						TiUIView view = mViews.get(index).getOrCreateView();
-						int height = view.getLayoutParams().optionHeight.getAsPixels(this);
-						heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
+						if (view.getLayoutParams().optionHeight == null) {
+							View child = view.getNativeView();
+							child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+							h = child.getMeasuredHeight();
+						} else {
+							h = view.getLayoutParams().optionHeight.getAsPixels(this);
+						}
+						if (h > height) {
+							height = h;
+						}
 					}
+					heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
 				}
 				super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 			}
