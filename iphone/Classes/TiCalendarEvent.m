@@ -6,6 +6,8 @@
  */
 #ifdef USE_TI_CALENDAR
 
+#import "TiApp.h"
+#import "TiEventEditViewDelegate.h"
 #import "TiCalendarEvent.h"
 #import "CalendarModule.h"
 #import "TiCalendarAlert.h"
@@ -519,6 +521,22 @@
   }
 
   return result;
+}
+
+-(void) showEditor:(id)args
+{
+    ENSURE_SINGLE_ARG(args, KrollCallback);
+    KrollCallback * callback = args;
+    
+    EKEventEditViewController* editViewController = [[EKEventEditViewController alloc] init];
+    editViewController.eventStore = [module store];
+    editViewController.event = event;
+    editViewController.editViewDelegate = [[TiEventEditViewDelegate alloc] initWithCallback:callback];
+    
+    TiThreadPerformOnMainThread(^{
+        [[TiApp app] showModalController:editViewController
+                                animated:YES];
+    }, YES);
 }
 
 @end
