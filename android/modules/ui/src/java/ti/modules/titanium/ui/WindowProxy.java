@@ -64,7 +64,9 @@ import android.view.Window;
 		TiC.PROPERTY_MODAL,
 		TiC.PROPERTY_WINDOW_PIXEL_FORMAT,
 		TiC.PROPERTY_FLAG_SECURE,
-		TiC.PROPERTY_BAR_COLOR
+		TiC.PROPERTY_BAR_COLOR,
+		TiC.PROPERTY_STATUS_BAR_COLOR,
+		TiC.PROPERTY_TITLE_ATTRIBUTES
 })
 // clang-format on
 public class WindowProxy extends TiWindowProxy implements TiActivityWindow
@@ -380,6 +382,14 @@ public class WindowProxy extends TiWindowProxy implements TiActivityWindow
 			boolean splitActionBar = TiConvert.toBoolean(getProperty(TiC.PROPERTY_SPLIT_ACTIONBAR), false);
 			if (splitActionBar) {
 				intent.putExtra(TiC.PROPERTY_SPLIT_ACTIONBAR, splitActionBar);
+			}
+		}
+
+		// Set the statusBarColor property
+		if (hasProperty(TiC.PROPERTY_STATUS_BAR_COLOR)) {
+			String statusBarColor = TiConvert.toString(getProperty(TiC.PROPERTY_STATUS_BAR_COLOR), "");
+			if (statusBarColor != "") {
+				intent.putExtra(TiC.PROPERTY_STATUS_BAR_COLOR, statusBarColor);
 			}
 		}
 	}

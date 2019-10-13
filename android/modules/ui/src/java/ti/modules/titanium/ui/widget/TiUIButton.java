@@ -104,21 +104,17 @@ public class TiUIButton extends TiUIView
 			} else {
 				btn.setTextColor(TiConvert.toColor(d, TiC.PROPERTY_COLOR));
 			}
+		}
 		if (d.containsKey(TiC.PROPERTY_COLOR) || d.containsKey(TiC.PROPERTY_SELECTED_COLOR)) {
 			btn.setTextColor(new ColorStateList(
-					new int[][] { 
-						new int[] { 
-							android.R.attr.state_pressed 
-						},
-						new int[] {},
-					},
-					new int[] {
-						d.get(TiC.PROPERTY_SELECTED_COLOR) == null ? defaultColor
-								: TiConvert.toColor(d,
-										TiC.PROPERTY_SELECTED_COLOR),
-						d.get(TiC.PROPERTY_COLOR) == null ? defaultColor
-								: TiConvert.toColor(d, TiC.PROPERTY_COLOR) 
-					}));
+				new int[][] {
+					new int[] { android.R.attr.state_pressed },
+					new int[] {},
+				},
+				new int[] {
+					d.get(TiC.PROPERTY_SELECTED_COLOR) == null ? defaultColor
+															   : TiConvert.toColor(d, TiC.PROPERTY_SELECTED_COLOR),
+					d.get(TiC.PROPERTY_COLOR) == null ? defaultColor : TiConvert.toColor(d, TiC.PROPERTY_COLOR) }));
 		}
 		if (d.containsKey(TiC.PROPERTY_FONT)) {
 			TiUIHelper.styleText(btn, d.getKrollDict(TiC.PROPERTY_FONT));
@@ -175,30 +171,21 @@ public class TiUIButton extends TiUIView
 			setAttributedStringText((AttributedStringProxy) newValue);
 		} else if (key.equals(TiC.PROPERTY_COLOR)) {
 			btn.setTextColor(new ColorStateList(
-					new int[][] { 
-						new int[] { 
-							android.R.attr.state_pressed 
-						},
-						new int[] {},
-					},
-					new int[] {
-						btn.getTextColors().getColorForState(new int[] { 
-								android.R.attr.state_pressed 
-							}, defaultColor),
-						TiConvert.toColor(TiConvert.toString(newValue))
-			}));
+				new int[][] {
+					new int[] { android.R.attr.state_pressed },
+					new int[] {},
+				},
+				new int[] {
+					btn.getTextColors().getColorForState(new int[] { android.R.attr.state_pressed }, defaultColor),
+					TiConvert.toColor(TiConvert.toString(newValue)) }));
 		} else if (key.equals(TiC.PROPERTY_SELECTED_COLOR)) {
 			btn.setTextColor(new ColorStateList(
-					new int[][] { 
-						new int[] { 
-							android.R.attr.state_pressed 
-						},
-						new int[] {},
-					},
-					new int[] {
-						TiConvert.toColor(TiConvert.toString(newValue)),
-						btn.getTextColors().getColorForState(new int[] {}, defaultColor)
-			}));
+				new int[][] {
+					new int[] { android.R.attr.state_pressed },
+					new int[] {},
+				},
+				new int[] { TiConvert.toColor(TiConvert.toString(newValue)),
+							btn.getTextColors().getColorForState(new int[] {}, defaultColor) }));
 		} else if (key.equals(TiC.PROPERTY_FONT)) {
 			TiUIHelper.styleText(btn, (HashMap) newValue);
 		} else if (key.equals(TiC.PROPERTY_TEXT_ALIGN)) {

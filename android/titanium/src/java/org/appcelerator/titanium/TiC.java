@@ -1326,21 +1326,11 @@ public class TiC
 	 * @module.api
 	 */
 	public static final String PROPERTY_CODE = "code";
-	
-	/**
-	 * @module.api
-	 */
-	public static final String PROPERTY_COLOR = "color";
-	
-	/**
-	 * @module.api
-	 */
-	public static final String PROPERTY_SELECTED_COLOR = "selectedColor";
 
 	/**
 	 * @module.api
 	 */
-	public static final String PROPERTY_COMMENT = "comment";
+	public static final String PROPERTY_SELECTED_COLOR = "selectedColor";
 
 	/**
 	 * @module.api
@@ -3030,6 +3020,11 @@ public class TiC
 	public static final String PROPERTY_SPLIT_ACTIONBAR = "splitActionBar";
 
 	/**
+	* @module.api
+	*/
+	public static final String PROPERTY_STATUS_BAR_COLOR = "statusBarColor";
+
+	/**
 	 * @module.api
 	 */
 	public static final String PROPERTY_SPLIT_TRACK = "splitTrack";
@@ -3208,6 +3203,11 @@ public class TiC
 	 * @module.api
 	 */
 	public static final String PROPERTY_TITLE = "title";
+
+	/**
+	 * @module.api
+	 */
+	public static final String PROPERTY_TITLE_ATTRIBUTES = "titleAttributes";
 
 	/**
 	 * @module.api
