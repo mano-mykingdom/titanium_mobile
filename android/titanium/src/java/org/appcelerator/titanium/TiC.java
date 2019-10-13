@@ -1326,6 +1326,21 @@ public class TiC
 	 * @module.api
 	 */
 	public static final String PROPERTY_CODE = "code";
+	
+	/**
+	 * @module.api
+	 */
+	public static final String PROPERTY_COLOR = "color";
+	
+	/**
+	 * @module.api
+	 */
+	public static final String PROPERTY_SELECTED_COLOR = "selectedColor";
+
+	/**
+	 * @module.api
+	 */
+	public static final String PROPERTY_COMMENT = "comment";
 
 	/**
 	 * @module.api
