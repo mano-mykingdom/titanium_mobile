@@ -85,7 +85,6 @@ import android.view.ViewGroup.LayoutParams;
 public abstract class TiBaseActivity extends AppCompatActivity implements TiActivitySupport /*, ITiWindowHandler*/
 {
 	private static final String TAG = "TiBaseActivity";
-	private static final boolean LOLLIPOP_OR_GREATER = (Build.VERSION.SDK_INT >= 21);
 
 	private boolean onDestroyFired = false;
 	private int originalOrientationMode = -1;
@@ -711,7 +710,7 @@ public abstract class TiBaseActivity extends AppCompatActivity implements TiActi
 		}
 
 		//set status bar color
-		if (LOLLIPOP_OR_GREATER) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			String color = getIntentString(TiC.PROPERTY_STATUS_BAR_COLOR, "");
 			if (color != "") {
 				getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
