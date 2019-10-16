@@ -402,7 +402,7 @@ public abstract class TiBaseActivity extends AppCompatActivity implements TiActi
 			runOnUiThread(new Runnable() {
 				public void run()
 				{
-					activityProxy.getActionBar().setTitleProperties(titleAttributes);
+					activityProxy.getActionBar().setTitleAttributes(titleAttributes);
 				}
 			});
 		}
