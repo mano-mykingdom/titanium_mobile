@@ -176,7 +176,7 @@ public class ActionBarProxy extends KrollProxy
 	@Kroll
 		.method
 		@Kroll.setProperty
-		public void setTitleProperties(HashMap d)
+		public void setTitleAttributes(HashMap d)
 	{
 		if (TiApplication.isUIThread()) {
 			handleSetTitleAttributes(d);
@@ -274,7 +274,11 @@ public class ActionBarProxy extends KrollProxy
 		if (actionBar == null) {
 			return null;
 		}
-		return (String) actionBar.getSubtitle();
+		if (actionBar.getSubtitle() instanceof String) {
+			return (String) actionBar.getSubtitle();
+		} else {
+			return ((SpannableStringBuilder) actionBar.getSubtitle()).toString();
+		}
 	}
 
 	// clang-format off
@@ -286,7 +290,11 @@ public class ActionBarProxy extends KrollProxy
 		if (actionBar == null) {
 			return null;
 		}
-		return (String) actionBar.getTitle();
+		if (actionBar.getTitle() instanceof String) {
+			return (String) actionBar.getTitle();
+		} else {
+			return ((SpannableStringBuilder) actionBar.getTitle()).toString();
+		}
 	}
 
 	// clang-format off
@@ -356,7 +364,7 @@ public class ActionBarProxy extends KrollProxy
 		}
 	}
 
-	private void handleSetTitleProperties(HashMap d)
+	private void handleSetTitleAttributes(HashMap d)
 	{
 		if (actionBar == null) {
 			Log.w(TAG, "ActionBar is not enabled");
@@ -370,6 +378,8 @@ public class ActionBarProxy extends KrollProxy
 			title = (String) d.get(TiC.PROPERTY_TITLE);
 		} else if (actionBar.getTitle() instanceof String) {
 			title = TiConvert.toString(actionBar.getTitle());
+		} else if (actionBar.getTitle() instanceof SpannableStringBuilder) {
+			title = ((SpannableStringBuilder) actionBar.getTitle()).toString();
 		}
 
 		if (actionBar.getTitle() instanceof SpannableStringBuilder) {
@@ -400,7 +410,7 @@ public class ActionBarProxy extends KrollProxy
 		actionBar.setTitle(ssb);
 	}
 
-	private void handleSetSubtitleProperties(HashMap d)
+	private void handleSetSubtitleAttributes(HashMap d)
 	{
 		if (actionBar == null) {
 			Log.w(TAG, "ActionBar is not enabled");
@@ -415,6 +425,8 @@ public class ActionBarProxy extends KrollProxy
 			subtitle = (String) d.get(TiC.PROPERTY_SUBTITLE);
 		} else if (actionBar.getSubtitle() instanceof String) {
 			subtitle = TiConvert.toString(actionBar.getSubtitle());
+		} else if (actionBar.getSubtitle() instanceof SpannableStringBuilder) {
+			subtitle = ((SpannableStringBuilder) actionBar.getSubtitle()).toString();
 		}
 
 		if (actionBar.getSubtitle() instanceof SpannableStringBuilder) {
@@ -525,7 +537,14 @@ public class ActionBarProxy extends KrollProxy
 	private void handleSetTitle(String title)
 	{
 		if (actionBar != null) {
-			actionBar.setTitle(title);
+			if (actionBar.getTitle() instanceof String) {
+				actionBar.setTitle(title);
+			} else {
+				SpannableStringBuilder ssb = (SpannableStringBuilder) actionBar.getTitle();
+				ssb.clear();
+				ssb.append(title);
+				actionBar.setTitle(ssb);
+			}
 		} else {
 			Log.w(TAG, "ActionBar is not enabled");
 		}
@@ -535,7 +554,14 @@ public class ActionBarProxy extends KrollProxy
 	{
 		if (actionBar != null) {
 			actionBar.setDisplayShowTitleEnabled(true);
-			actionBar.setSubtitle(subTitle);
+			if (actionBar.getSubtitle() instanceof String) {
+				actionBar.setSubtitle(subTitle);
+			} else {
+				SpannableStringBuilder ssb = (SpannableStringBuilder) actionBar.getSubtitle();
+				ssb.clear();
+				ssb.append(subTitle);
+				actionBar.setSubtitle(ssb);
+			}
 		} else {
 			Log.w(TAG, "ActionBar is not enabled");
 		}
