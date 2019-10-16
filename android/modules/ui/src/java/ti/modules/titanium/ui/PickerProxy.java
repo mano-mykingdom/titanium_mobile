@@ -605,6 +605,8 @@ public class PickerProxy extends TiViewProxy implements PickerColumnListener
 	{
 		HashMap settings = new HashMap();
 		boolean is24HourView = false;
+		boolean cancelable = true;
+		int minuteInterval = 1;
 		final AtomicInteger callbackCount =
 			new AtomicInteger(0); // just a flag to be sure dismiss doesn't fire callback if ondateset did already.
 		if (args.length > 0) {
@@ -673,11 +675,6 @@ public class PickerProxy extends TiViewProxy implements PickerColumnListener
 				}
 			};
 		}
-
-		// TimePickerDialog has a bug in Android 4.x
-		// If build version is using Android 4.x, use
-		// our TiTimePickerDialog. It was fixed from Android 5.0.
-		TimePickerDialog dialog;
 
 		// use default theme if minuteInterval is 1
 		// Android 5.0 onwards this hack doesn't work because of the default clock theme
